@@ -1,4 +1,4 @@
-const API_BASE = "https://procureiq-hg8h.onrender.com";
+const API_BASE = "https://procureiq-hg8h.onrender.com/api";
 let productsData = [];
 
 function toggleAuthView(view) {
