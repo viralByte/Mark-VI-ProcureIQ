@@ -1,6 +1,25 @@
 const API_BASE = "https://procureiq-hg8h.onrender.com/api";
 let productsData = [];
 
+// Run this exactly when the page loads
+window.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    
+    if (isLoggedIn === "true") {
+        // The user is already logged in! 
+        // Hide the login screen and show your main dashboard
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("dashboard-container").style.display = "block";
+        
+        // (Optional) If you have a function that loads your vendors/products, call it here!
+        // fetchAllData(); 
+    } else {
+        // Not logged in. Show the login screen.
+        document.getElementById("login-container").style.display = "block";
+        document.getElementById("dashboard-container").style.display = "none";
+    }
+});
+
 function toggleAuthView(view) {
     if (view === 'signup') {
         document.getElementById('signin-card').classList.add('hidden');
@@ -116,6 +135,7 @@ async function handleGoogleLogin(response) {
     
     document.getElementById('app-content').classList.remove('hidden');
     await fetchAllData();
+    localStorage.setItem("isLoggedIn", "true");
 }
 
 function decodeJwt(token) {
@@ -130,7 +150,14 @@ function decodeJwt(token) {
 function logout() {
     location.reload(); 
 }
-
+function handleLogout() {
+    // Wipe the memory
+    localStorage.removeItem("isLoggedIn");
+    
+    // Send them back to the login screen
+    document.getElementById("dashboard-container").style.display = "none";
+    document.getElementById("login-container").style.display = "block";
+}
 async function fetchAllData() {
     try {
         const vendorRes = await fetch(`${API_BASE}/vendors/`);
