@@ -1,4 +1,12 @@
 const API_BASE = "https://procureiq-hg8h.onrender.com/api";
+// Connect to the Node.js Real-Time Microservice
+const socket = io("https://procureiq-notifications.onrender.com"); // <-- PUT YOUR NEW RENDER URL HERE
+
+// Listen for notifications from the server
+socket.on('notification', (message) => {
+    // A simple browser alert for the popup notification
+    alert(message); 
+});
 let productsData = [];
 
 // Run this exactly when the page loads
@@ -321,6 +329,8 @@ async function submitPurchaseOrder() {
     } catch (error) {
         console.error("Error submitting PO:", error);
     }
+    // Tell the Node server to broadcast the alert
+    socket.emit('po_status_change', { reference: "Just Created" });
 }
 
 async function triggerAI(rowId) {
