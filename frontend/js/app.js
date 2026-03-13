@@ -1,11 +1,6 @@
 const API_BASE = "http://127.0.0.1:8000/api";
 let productsData = [];
 
-// ==========================================
-// 1. AUTH & DATA LOADING
-// ==========================================
-
-// Toggles between the Sign In and Sign Up cards
 function toggleAuthView(view) {
     if (view === 'signup') {
         document.getElementById('signin-card').classList.add('hidden');
@@ -16,7 +11,6 @@ function toggleAuthView(view) {
     }
 }
 
-// Validates the traditional email/password form against our Local Database
 function handleStandardLogin() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
@@ -36,25 +30,19 @@ function handleStandardLogin() {
     btn.disabled = true;
 
     setTimeout(async () => {
-        // Fetch registered users from the Local Database
         const storedUsers = JSON.parse(localStorage.getItem('procureiq_users')) || [];
         
-        // Check if the credentials match the Master Admin OR a registered user
         const validUser = storedUsers.find(u => u.email === email && u.password === password);
 
         if (email === "admin@procureiq.com" && password === "admin123") {
-            // Master Admin Login
             await loginSuccess("System Admin", "fa-user-shield");
         } else if (validUser) {
-            // Registered User Login
             await loginSuccess(validUser.name, "fa-user-check");
         } else {
-            // Failure! Show error
             errorMsg.innerText = "Invalid credentials. Access denied.";
             errorMsg.classList.remove('hidden');
         }
 
-        // Reset button state
         btn.innerText = "Sign In";
         btn.style.opacity = "1";
         btn.disabled = false;
@@ -62,7 +50,6 @@ function handleStandardLogin() {
     }, 800);
 }
 
-// Processes the new user registration and saves to Local Database
 function handleSignUp() {
     const name = document.getElementById('signup-name').value;
     const email = document.getElementById('signup-email').value;
@@ -78,7 +65,6 @@ function handleSignUp() {
         return;
     }
 
-    // Fetch existing users to ensure no duplicate emails
     const storedUsers = JSON.parse(localStorage.getItem('procureiq_users')) || [];
     if (storedUsers.some(u => u.email === email)) {
         errorMsg.innerText = "This email is already registered.";
@@ -91,14 +77,11 @@ function handleSignUp() {
     btn.disabled = true;
 
     setTimeout(async () => {
-        // SAVE TO LOCAL DATABASE
         storedUsers.push({ name: name, email: email, password: password });
         localStorage.setItem('procureiq_users', JSON.stringify(storedUsers));
         
-        // Log them in immediately
         await loginSuccess(name, "fa-user-check");
 
-        // Reset the form in the background
         btn.innerText = "Create Account";
         btn.style.opacity = "1";
         btn.disabled = false;
@@ -110,7 +93,6 @@ function handleSignUp() {
     }, 1000);
 }
 
-// Helper function to handle a successful login (Standard or Sign Up)
 async function loginSuccess(displayName, iconClass) {
     document.getElementById('login-screen').classList.add('hidden');
     
@@ -122,7 +104,6 @@ async function loginSuccess(displayName, iconClass) {
     await fetchAllData();
 }
 
-// Handles real Google OAuth Login
 async function handleGoogleLogin(response) {
     const jwtToken = response.credential;
     const userPayload = decodeJwt(jwtToken);
@@ -152,7 +133,6 @@ function logout() {
 
 async function fetchAllData() {
     try {
-        // Fetch Vendors
         const vendorRes = await fetch(`${API_BASE}/vendors/`);
         const vendors = await vendorRes.json();
         
@@ -167,7 +147,6 @@ async function fetchAllData() {
             if (vendorTable) vendorTable.innerHTML += `<tr><td><strong>${v.name}</strong></td><td>${v.email}</td><td>${v.contact}</td><td>${stars}</td></tr>`;
         });
 
-        // Fetch Products
         const productRes = await fetch(`${API_BASE}/products/`);
         productsData = await productRes.json(); 
         
@@ -183,7 +162,6 @@ async function fetchAllData() {
             </tr>`;
         });
 
-        // Fetch Purchase Orders for Dashboard
         const ordersRes = await fetch(`${API_BASE}/orders/`);
         const orders = await ordersRes.json();
         
@@ -202,7 +180,6 @@ async function fetchAllData() {
             </tr>`;
         });
 
-        // Update KPIs
         if (document.getElementById('kpi-total-pos')) document.getElementById('kpi-total-pos').innerText = orders.length;
         if (document.getElementById('kpi-total-spend')) document.getElementById('kpi-total-spend').innerText = `$${totalSpend.toFixed(2)}`;
 
