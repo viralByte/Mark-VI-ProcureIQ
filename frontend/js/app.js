@@ -1,27 +1,26 @@
 const API_BASE = "https://procureiq-hg8h.onrender.com/api";
 
-// Connect to the Node.js Real-Time Microservice
-const socket = io("https://procureiq-notifications.onrender.com");
-
-// Listen for notifications from the server
-socket.on('notification', (message) => {
-    alert(message); 
-});
+let socket;
+try {
+    socket = io("https://procureiq-notifications.onrender.com");
+    socket.on('notification', (message) => {
+        alert(message); 
+    });
+} catch (error) {
+    console.warn("Socket.io is still loading...", error);
+}
 let productsData = [];
 
-// Run this exactly when the page loads
 window.addEventListener("DOMContentLoaded", () => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     
     if (isLoggedIn === "true") {
-        // The user is already logged in! 
-        // Hide the login screen and show your main dashboard
         document.getElementById("login-container").style.display = "none";
         document.getElementById("dashboard-container").style.display = "block";
         
-        fetchAllData(); 
+        fetchAllData();
+        toggleView('dashboard-view');
     } else {
-        // Not logged in. Show the login screen.
         document.getElementById("login-container").style.display = "block";
         document.getElementById("dashboard-container").style.display = "none";
     }
