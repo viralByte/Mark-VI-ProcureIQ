@@ -126,6 +126,7 @@ async function loginSuccess(displayName, iconClass) {
     logoutBtn.innerHTML = `<i class="fas ${iconClass}" style="margin-right:8px;"></i> ${displayName}`;
     
     document.getElementById('app-content').classList.remove('hidden');
+    localStorage.setItem("isLoggedIn", "true");
     await fetchAllData();
 }
 
