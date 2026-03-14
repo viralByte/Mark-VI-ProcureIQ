@@ -14,9 +14,9 @@ ProcureIQ is a full-stack, microservice-based Purchase Order Management System. 
 * **Authentication:** JWT via Google OAuth.
 * **Core Backend API:** Python (FastAPI) (Hosted on Render). Handles business logic, including the automatic 5% tax calculation.
 * **Core Database:** PostgreSQL (Hosted on Neon).
-* **Real-Time Service (Bonus):** Node.js with Socket.io (Hosted on Render) for real-time broadcast notifications upon PO status changes.
-* **AI Logging Service (Bonus):** MongoDB Atlas (NoSQL) for asynchronously storing raw JSON logs of AI-generated descriptions.
-* **Java Microservice (Bonus):** Java Spring Boot implementation of the Vendor Management service included in the `/backend-spring` directory.
+* **Real-Time Service :** Node.js with Socket.io (Hosted on Render) for real-time broadcast notifications upon PO status changes.
+* **AI Logging Service :** MongoDB Atlas (NoSQL) for asynchronously storing raw JSON logs of AI-generated descriptions.
+* **Java Microservice :** Java Spring Boot implementation of the Vendor Management service included in the `/backend-spring` directory.
 
 ## 🧠 The "Smart" Element (Gen AI Integration)
 The application integrates the Google Gemini API to generate professional, 2-sentence marketing descriptions for products based on their name and category. To ensure performance, the AI generation runs asynchronously, and the raw output is logged to a separate NoSQL MongoDB database.
