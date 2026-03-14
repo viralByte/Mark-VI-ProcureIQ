@@ -7,6 +7,8 @@ function enforceUIState() {
         // Change these IDs to match your actual HTML exactly!
         document.getElementById("login-screen").style.display = "none";
         document.getElementById("dashboard-screen").style.display = "block";
+
+        fetchAllData();
     }
 }
 
@@ -37,8 +39,7 @@ window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("login-container").style.display = "none";
         document.getElementById("dashboard-container").style.display = "block";
         
-        // (Optional) If you have a function that loads your vendors/products, call it here!
-        // fetchAllData(); 
+        fetchAllData(); 
     } else {
         // Not logged in. Show the login screen.
         document.getElementById("login-container").style.display = "block";
