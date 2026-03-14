@@ -196,7 +196,7 @@ async function fetchAllData() {
             </tr>`;
         });
 
-        const ordersRes = await fetch(`${API_BASE}/orders/`);
+        const ordersRes = await fetch(`${API_BASE}/orders/`, { cache: 'no-store' })
         const orders = await ordersRes.json();
         
         const poTable = document.getElementById('po-table-body');
@@ -322,6 +322,7 @@ async function submitPurchaseOrder() {
             alert("Purchase Order submitted!");
             document.getElementById('po-items-body').innerHTML = ''; 
             calculateTotals(); 
+            await new Promise(resolve => setTimeout(resolve, 500));
             await fetchAllData();
             toggleView('dashboard-view', document.querySelector('.nav-link'));
         }
