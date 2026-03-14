@@ -45,3 +45,15 @@ def seed_database():
         return {"message": "Database seeded successfully! You can now use the frontend."}
     finally:
         db.close()
+
+@app.delete("/api/orders/{order_id}")
+def delete_order(order_id: int, db: Session = Depends(get_db)):
+    # Find the order
+    order = db.query(PurchaseOrder).filter(PurchaseOrder.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Delete it and save the database
+    db.delete(order)
+    db.commit()
+    return {"message": "Order deleted successfully"}

@@ -196,10 +196,19 @@ async function fetchAllData() {
             </tr>`;
         });
 
-        const ordersRes = await fetch(`${API_BASE}/orders/`, { cache: 'no-store' })
-        const orders = await ordersRes.json();
+        const ordersRes = await fetch(`${API_BASE}/orders/`, { cache: 'no-store' });
+        const rawOrdersData = await ordersRes.json();
+        
+        // 1. Force it to be an array (in case Python returns { data: [...] })
+        const orders = Array.isArray(rawOrdersData) ? rawOrdersData : (rawOrdersData.data || rawOrdersData.orders || []);
         
         const poTable = document.getElementById('po-table-body');
+        
+        // 2. FORCE an alert if the HTML ID is wrong
+        if (!poTable) {
+            alert("DEVELOPER WARNING: Could not find id='po-table-body' in index.html!");
+        }
+
         if (poTable) poTable.innerHTML = '';
         let totalSpend = 0;
 
@@ -222,13 +231,23 @@ async function fetchAllData() {
             // 4. Create a dummy date to fill your missing 5th column
             let orderDate = new Date().toLocaleDateString();
 
-            // 5. Draw the 5 columns safely
+            // 5. Draw the 5 columns safely WITH the Delete Button
+            
+            // Create the delete button HTML (Only show it for Drafts!)
+            let deleteBtn = "";
+            if (o.status === 'Draft' || o.status === 'Submitted') { 
+                deleteBtn = `<button class="btn btn-sm btn-outline-danger ms-2" onclick="deleteOrder(${o.id})" title="Delete PO">✖</button>`;
+            }
+
             if (poTable) poTable.innerHTML += `<tr>
                 <td><strong>${o.reference_no || 'PO-NEW'}</strong></td>
                 <td>${vendorName}</td>
                 <td>${orderDate}</td>
                 <td>$${total.toFixed(2)}</td>
-                <td><span class="badge ${statusBadge}">${o.status || 'Submitted'}</span></td>
+                <td>
+                    <span class="badge ${statusBadge}">${o.status || 'Submitted'}</span>
+                    ${deleteBtn}
+                </td>
             </tr>`;
         });
 
@@ -375,5 +394,25 @@ async function triggerAI(rowId) {
         document.getElementById('ai-response-text').innerHTML = `<strong>${prodName}:</strong> ${data.description || data.detail}`;
     } catch (error) {
         document.getElementById('ai-response-text').innerText = "Failed to connect to backend.";
+    }
+}
+async function deleteOrder(orderId) {
+    // 1. Ask for confirmation before deleting
+    if (!confirm("Are you sure you want to delete this Purchase Order?")) return;
+
+    try {
+        // 2. Send the DELETE request to your Python server
+        const res = await fetch(`${API_BASE}/orders/${orderId}`, {
+            method: "DELETE"
+        });
+        
+        if (res.ok) {
+            // 3. If successful, refresh the dashboard!
+            await fetchAllData();
+        } else {
+            alert("Failed to delete. Make sure your Python backend has a DELETE endpoint!");
+        }
+    } catch (error) {
+        console.error("Error deleting order:", error);
     }
 }
