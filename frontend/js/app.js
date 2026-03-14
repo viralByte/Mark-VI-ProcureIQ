@@ -204,13 +204,31 @@ async function fetchAllData() {
         let totalSpend = 0;
 
         orders.forEach(o => {
-            totalSpend += o.grand_total;
+            // 1. Safely handle the grand total (prevents .toFixed crash if null)
+            let total = o.grand_total || 0;
+            totalSpend += total;
+            
+            // 2. Safely handle the status badge
             let statusBadge = o.status === 'Draft' ? 'bg-secondary' : 'bg-success';
+            
+            // 3. Safely handle the Vendor Name (just in case Python only sends the ID)
+            let vendorName = "Unknown Vendor";
+            if (o.vendor && o.vendor.name) {
+                vendorName = o.vendor.name;
+            } else if (o.vendor_id) {
+                vendorName = `Vendor #${o.vendor_id}`;
+            }
+
+            // 4. Create a dummy date to fill your missing 5th column
+            let orderDate = new Date().toLocaleDateString();
+
+            // 5. Draw the 5 columns safely
             if (poTable) poTable.innerHTML += `<tr>
-                <td><strong>${o.reference_no}</strong></td>
-                <td>${o.vendor.name}</td>
-                <td>$${o.grand_total.toFixed(2)}</td>
-                <td><span class="badge ${statusBadge}">${o.status}</span></td>
+                <td><strong>${o.reference_no || 'PO-NEW'}</strong></td>
+                <td>${vendorName}</td>
+                <td>${orderDate}</td>
+                <td>$${total.toFixed(2)}</td>
+                <td><span class="badge ${statusBadge}">${o.status || 'Submitted'}</span></td>
             </tr>`;
         });
 
