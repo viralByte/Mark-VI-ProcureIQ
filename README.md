@@ -3,7 +3,7 @@
 **ERP System Assignment for IV INNOVATIONS PRIVATE LIMITED**
 
 **Live Demo:** https://iq-procure.vercel.app/  
-**Video Walkthrough:** [Insert Your YouTube/Loom Video URL Here]  
+**Video Walkthrough:** https://drive.google.com/file/d/1K0Z5X1qDRJRvUrXGVBASih8n6zX45Mfl/view?usp=drivesdk  
 **Author:** Viral Dubey
 
 ## 📖 Project Overview
