@@ -1,30 +1,10 @@
-// 1. Immediately check status the millisecond the file loads
-const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-// 2. Create a function to force the UI
-function enforceUIState() {
-    if (isLoggedIn === "true") {
-        // Change these IDs to match your actual HTML exactly!
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("dashboard-screen").style.display = "block";
-
-        fetchAllData();
-    }
-}
-
-// 3. Run it immediately
-enforceUIState();
-
-// 4. Run it again when the DOM fully loads (just to be safe against race conditions)
-window.addEventListener("DOMContentLoaded", enforceUIState);
-
 const API_BASE = "https://procureiq-hg8h.onrender.com/api";
+
 // Connect to the Node.js Real-Time Microservice
-const socket = io("https://procureiq-notifications.onrender.com"); // <-- PUT YOUR NEW RENDER URL HERE
+const socket = io("https://procureiq-notifications.onrender.com");
 
 // Listen for notifications from the server
 socket.on('notification', (message) => {
-    // A simple browser alert for the popup notification
     alert(message); 
 });
 let productsData = [];
