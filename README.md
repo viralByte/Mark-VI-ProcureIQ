@@ -7,28 +7,28 @@
 **Author:** Viral Dubey
 
 ## 📖 Project Overview
-[cite_start]ProcureIQ is a full-stack, microservice-based Purchase Order Management System[cite: 3, 5]. [cite_start]It facilitates tight integration between Vendors, Products, and Orders[cite: 6], demonstrating a modern cloud-native architecture with real-time capabilities and AI integration.
+ProcureIQ is a full-stack, microservice-based Purchase Order Management System. It facilitates tight integration between Vendors, Products, and Orders, demonstrating a modern cloud-native architecture with real-time capabilities and AI integration.
 
 ## 🚀 Tech Stack & Microservice Architecture
-* [cite_start]**Frontend:** Vanilla JS, HTML5, CSS3, Bootstrap (Hosted on Vercel)[cite: 15]. [cite_start]Features dynamic row generation for PO items[cite: 18].
-* [cite_start]**Authentication:** JWT via Google OAuth[cite: 19].
-* [cite_start]**Core Backend API:** Python (FastAPI) (Hosted on Render)[cite: 8, 9]. [cite_start]Handles business logic, including the automatic 5% tax calculation[cite: 14].
-* [cite_start]**Core Database:** PostgreSQL (Hosted on Neon)[cite: 8].
-* [cite_start]**Real-Time Service (Bonus):** Node.js with Socket.io (Hosted on Render) for real-time broadcast notifications upon PO status changes[cite: 30, 31].
-* [cite_start]**AI Logging Service (Bonus):** MongoDB Atlas (NoSQL) for asynchronously storing raw JSON logs of AI-generated descriptions[cite: 28, 29].
-* [cite_start]**Java Microservice (Bonus):** Java Spring Boot implementation of the Vendor Management service included in the `/backend-spring` directory[cite: 26, 27].
+* **Frontend:** Vanilla JS, HTML5, CSS3, Bootstrap (Hosted on Vercel). Features dynamic row generation for PO items.
+* **Authentication:** JWT via Google OAuth.
+* **Core Backend API:** Python (FastAPI) (Hosted on Render). Handles business logic, including the automatic 5% tax calculation.
+* **Core Database:** PostgreSQL (Hosted on Neon).
+* **Real-Time Service (Bonus):** Node.js with Socket.io (Hosted on Render) for real-time broadcast notifications upon PO status changes.
+* **AI Logging Service (Bonus):** MongoDB Atlas (NoSQL) for asynchronously storing raw JSON logs of AI-generated descriptions.
+* **Java Microservice (Bonus):** Java Spring Boot implementation of the Vendor Management service included in the `/backend-spring` directory.
 
 ## 🧠 The "Smart" Element (Gen AI Integration)
-[cite_start]The application integrates the Google Gemini API to generate professional, 2-sentence marketing descriptions for products based on their name and category[cite: 20, 21, 22]. [cite_start]To ensure performance, the AI generation runs asynchronously, and the raw output is logged to a separate NoSQL MongoDB database[cite: 28, 29].
+The application integrates the Google Gemini API to generate professional, 2-sentence marketing descriptions for products based on their name and category. To ensure performance, the AI generation runs asynchronously, and the raw output is logged to a separate NoSQL MongoDB database.
 
 ## 🗄️ Database Design & Logic
-[cite_start]The PostgreSQL database is fully normalized to maintain strict data integrity. 
-* [cite_start]**Vendors:** Stores supplier details (`Name`, `Contact`, `Rating`)[cite: 11].
-* [cite_start]**Products:** Stores inventory details (`Name`, `SKU`, `Unit Price`, `Stock Level`)[cite: 12].
-* [cite_start]**PurchaseOrders:** Stores the overarching order data (`Reference No`, `VendorID`, `Total Amount`, `Status`)[cite: 13].
-* [cite_start]**PurchaseOrderItems:** A bridging table mapping multiple products to a single PO, ensuring accurate line-item math and enabling the dynamic UI[cite: 18].
+The PostgreSQL database is fully normalized to maintain strict data integrity. 
+* **Vendors:** Stores supplier details (`Name`, `Contact`, `Rating`).
+* **Products:** Stores inventory details (`Name`, `SKU`, `Unit Price`, `Stock Level`).
+* **PurchaseOrders:** Stores the overarching order data (`Reference No`, `VendorID`, `Total Amount`, `Status`).
+* **PurchaseOrderItems:** A bridging table mapping multiple products to a single PO, ensuring accurate line-item math and enabling the dynamic UI.
 
-[cite_start]**Integrity Checks:** Foreign Keys are strictly enforced (e.g., `VendorID` in `PurchaseOrders` maps to `Vendors.id`), and `ON DELETE CASCADE` is utilized for PO items to prevent orphaned records. [cite_start]A full SQL schema export is provided in `schema.sql`[cite: 36].
+**Integrity Checks:** Foreign Keys are strictly enforced (e.g., `VendorID` in `PurchaseOrders` maps to `Vendors.id`), and `ON DELETE CASCADE` is utilized for PO items to prevent orphaned records. A full SQL schema export is provided in `schema.sql`.
 
 ## 💻 How to Run Locally
 
